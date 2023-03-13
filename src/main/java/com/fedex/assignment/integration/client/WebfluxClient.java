@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class WebfluxClient<T> {
     private static final int MAX_ATTEMPTS = 3;
-    private static final int RETRY_MILLIS = 50;
+    private static final int RETRY_MILLIS = 10;
     private static final int FLUX_TIMEOUT = 40;
     private static final int MONO_TIMEOUT = 25;
     public static final int CACHE_DURATION_MIN = 1;
@@ -53,7 +53,7 @@ public class WebfluxClient<T> {
                 .bodyToMono(new ParameterizedTypeReference<T>() {})
                 .publishOn(Schedulers.parallel())
                 .timeout(Duration.ofMillis(MONO_TIMEOUT), Mono.empty())
-                .retryWhen(Retry.backoff(MAX_ATTEMPTS, Duration.ofMillis(RETRY_MILLIS)))
+                .retryWhen(Retry.fixedDelay(MAX_ATTEMPTS, Duration.ofMillis(RETRY_MILLIS)))
                 .onErrorResume(error -> {
                     log.error("Shipment service responded with error: {} ", error.getStackTrace());
                     return Mono.empty();
