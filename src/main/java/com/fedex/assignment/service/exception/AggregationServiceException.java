@@ -1,4 +1,4 @@
-package com.fedex.assignment.service;
+package com.fedex.assignment.service.exception;
 
 public class AggregationServiceException extends RuntimeException {
 

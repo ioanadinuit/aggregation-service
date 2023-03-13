@@ -4,6 +4,7 @@ import com.fedex.assignment.integration.client.PricingResourceApiCall;
 import com.fedex.assignment.integration.client.ShipmentProductsApiCall;
 import com.fedex.assignment.integration.client.StatusTrackingApiCall;
 import com.fedex.assignment.model.ShipmentsTrackingDTO;
+import com.fedex.assignment.service.exception.AggregationServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
