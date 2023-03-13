@@ -34,7 +34,7 @@ public class WebfluxClient<T> {
 
     public Mono<Map<String, T>> getResources(String uri,
                                        String param,
-                                       List<String> items) throws ExecutionException, InterruptedException {
+                                       List<String> items) {
         return Flux.fromIterable(items)
                 .cache(Duration.ofMinutes(CACHE_DURATION_MIN))
                 .timeout(Duration.ofMillis(FLUX_TIMEOUT))
