@@ -1,0 +1,8 @@
+server:
+  port: 8085
+
+shipment:
+  service:
+    url: http://backend-services:4000
+    maxMemorySize: 5000000
+

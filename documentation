@@ -1,0 +1,59 @@
+The requirements of the Aggregation Service are oriented on a "best effort API".
+
+This means that in a limited, short amount of time, an Web Client should try to retrieve data from the
+three provided APIs:
+
+GET http://127.0.0.1:4000/shipment-products?orderNumber=109347263
+GET http://127.0.0.1:4000/track-status?orderNumber=109347263
+GET http://127.0.0.1:4000/pricing?countryCode=NL
+
+As we could assume that in real life our application support a large amount of data, the waiting time for each
+of the above should be short.
+
+Adding up retrieving and aggregating the data needed time, the response of the required API: /aggregation should be
+less that 5 seconds. This is why, slow response requests to the provided microservice should be aborted.
+
+To be able to design this application, a reactive Api was implemented.
+
+For implementing the client, Webflux is the most scalable solution.
+
+Webflux is used in this implementation because it is designed to handle non-blocking I/O operations efficiently.
+With Webflux, the code can handle a large number of concurrent requests without blocking the thread.
+The reactive approach allows the application to handle a large number of requests with low resource usage,
+and it can handle requests faster than traditional blocking I/O methods.
+
+For the purpose of code re-usage, a generic WebfluxClient was designed.
+
+The WebClient is configured to use ExchangeStrategies and a CloseableHttpAsyncClient.
+
+The ExchangeStrategies object is used to configure the serialization and deserialization of request and response data.
+In this configuration, a new ExchangeStrategies instance is created using the builder() method.
+The maxInMemorySize parameter sets the maximum amount of memory that the WebClient will use for buffering response data.
+
+For demo purposes, 5mb of data were added as maxMemorySize. Our application will not receive data in such big chunks.
+
+CloseableHttpAsyncClient initiates asynchronous HTTP request execution using the given context.
+As we need to process data fastly and the order is not important,
+this client is ideal for retrieving and aggregating data.
+
+The flux has a total timeout of 40millis meaning that for each callApi() call it expects to finish in this amount of time.
+The mono timeout expects the call to end in 25millis.
+
+The provided application tends to respond bellow 10ms. In the worst cases, over 25ms would not be enough.
+
+This millis will allow the application to make the best effort in retrieving as much data as possible under 5s,
+aggregating it and returning it to the Aggregation Service client.
+
+Also, for demo purposes and for performance improvements, a cache duration of 1 minute for the flux and the mono
+was set.
+
+For processing, Schedulers.parallel() method was used to ensure an unbounded scheduler
+that creates a new thread for each task that needs to be executed
+
+
+
+
+
+
+
+
