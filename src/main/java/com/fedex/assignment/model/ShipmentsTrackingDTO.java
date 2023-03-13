@@ -14,12 +14,12 @@ import static java.util.Collections.emptyMap;
 public class ShipmentsTrackingDTO {
 
   @JsonProperty("shipments")
-  private Map<String, List<String>> shipments = emptyMap();
+  private Map<String, List<String>> shipments;
 
   @JsonProperty("track")
-  private Map<String, String> track = emptyMap();
+  private Map<String, String> track;
 
   @JsonProperty("pricing")
-  private Map<String, Double> pricing = emptyMap();
+  private Map<String, Double> pricing;
 
 }
